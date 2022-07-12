@@ -3,8 +3,9 @@ import Peer from 'simple-peer';
 import socket from '../socket';
 import VideoCard from './VideoCard';
 import BottomBar from './BottomBar';
-// import Chat from './Chat';
+import ScreenRecorder from './ScreenRecording'
 
+// import Chat from './Chat';
 const Room = (props) => {
   const currentUser = sessionStorage.getItem('user');
   const [peers, setPeers] = useState([]);
@@ -20,8 +21,8 @@ const Room = (props) => {
   const screenTrackRef = useRef();
   const userStream = useRef();
   const roomId = props.match.params.roomId;
-
-  useEffect(() => {
+  
+  useEffect(() => { 
     // Get Video Devices
     navigator.mediaDevices.enumerateDevices().then((devices) => {
       const filtered = devices.filter((device) => device.kind === 'videoinput');
@@ -163,6 +164,7 @@ const Room = (props) => {
         from: caller,
         signal,
       });
+      
     });
     peer.on('disconnect', () => {
       peer.destroy();
@@ -354,6 +356,7 @@ const Room = (props) => {
     }
   };
 
+
   return (
     <div style={{ display: "flex", width: '100%', maxHeight: "100vh", flexDirection: 'row' }} onClick={clickBackground}>
       <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
@@ -391,8 +394,23 @@ const Room = (props) => {
           setShowVideoDevices={setShowVideoDevices}
         />
       </div>
+      <ScreenRecorder />
       {/* <Chat display={displayChat} roomId={roomId} /> */}
+      {/* <div>
+          <ReactMediaRecorder
+            video
+            render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
+              <div>
+                <p>{status}</p>
+                <button onClick={startRecording}>Start Recording</button>
+                <button onClick={stopRecording}>Stop Recording</button>
+                <video src={mediaBlobUrl} controls autoPlay loop />
+                </div>
+            )}
+          />
+      </div> */}
     </div>
+    
   );
 };
 
